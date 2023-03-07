@@ -1,12 +1,10 @@
 package com.example.adotedog.model;
 
-import com.example.adotedog.enums.RoleUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
@@ -26,6 +24,7 @@ public class Usuario {
 
     private String senha;
 
-    @OneToMany(mappedBy = "role")
-    private List<RoleModel> roles;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private RoleModel role;
 }

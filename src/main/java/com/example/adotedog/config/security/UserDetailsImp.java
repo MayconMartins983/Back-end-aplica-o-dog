@@ -10,7 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.UUID;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -26,45 +26,43 @@ public class UserDetailsImp implements UserDetails {
     private Collection<? extends GrantedAuthority> roles;
 
     public static UserDetailsImp build(Usuario usuario) {
-        var roles = usuario.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getAuthority()))
-                .collect(Collectors.toList());
+        var role = new SimpleGrantedAuthority(usuario.getRole().getAuthority());
         return new UserDetailsImp(usuario.getId(), usuario.getNomeCompleto(),
-                usuario.getSenha(), usuario.getEmail(), roles);
+                usuario.getSenha(), usuario.getEmail(), List.of(role));
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return senha;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

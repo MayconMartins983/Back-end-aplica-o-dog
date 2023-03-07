@@ -28,17 +28,17 @@ public class DogController {
     }
 
     @GetMapping("adotados")
-    public List<DogModel> getAllAdotados() {
+    public List<DogModel> getByCode() {
         return service.getAllAdotados();
     }
 
-    @GetMapping("id/{id}")
-    public DogModel getAllAdotados(@PathVariable Long id) {
-        return service.findById(id);
+    @GetMapping("code/{code}")
+    public DogModel getByCode(@PathVariable Long code) {
+        return service.findByCode(code);
     }
 
-    @PutMapping("id/{id}")
-    public void alterarEstadoAdocaoDog(@PathVariable Long id) {
-        service.alterarEstadoAdocaoDog(id);
+    @PutMapping("code/{code}")
+    public void alterarEstadoAdocaoDog(@PathVariable Long code) {
+        service.alterarEstadoAdocaoDog(code);
     }
 }

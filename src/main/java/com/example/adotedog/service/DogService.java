@@ -8,11 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class DogService {
@@ -54,14 +51,14 @@ public class DogService {
         return repository.buscarPorSituacao(true);
     }
 
-    public DogModel findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> {
+    public DogModel findByCode(Long code) {
+        return repository.findByCodigo(code).orElseThrow(() -> {
             throw new RuntimeException("Dog não encontrado.");
         });
     }
 
-    public void alterarEstadoAdocaoDog(Long id) {
-        var dog = findById(id);
+    public void alterarEstadoAdocaoDog(Long code) {
+        var dog = findByCode(code);
         dog.setAdotado(!dog.isAdotado());
 
         repository.save(dog);

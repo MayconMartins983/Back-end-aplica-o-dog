@@ -1,8 +1,8 @@
 package com.example.adotedog.config.security.jwt;
 
 import com.example.adotedog.config.security.UserDetailsImp;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Component
+@Log4j2
 public class JwtProvider {
 
     @Value("${app-datas.auth.jwtSecret}")
@@ -26,11 +27,34 @@ public class JwtProvider {
                 .collect(Collectors.joining(","));
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUserId().toString())
+                .setSubject(userPrincipal.getEmail())
                 .claim("roles",roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
+    }
+
+    public boolean validateJwt(String authToken) {
+        try {
+            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            return true;
+        } catch (SignatureException e) {
+            log.error("Invalid JWT signature: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.error("Invalid JWT token: {}", e.getMessage());
+        } catch (ExpiredJwtException e) {
+            log.error("JWT token is expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.error("JWT token is unsupported: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.error("JWT claims string is empty: {}", e.getMessage());
+        }
+
+        return false;
+    }
+
+    public String getSubjectJwt(String token) {
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 }
