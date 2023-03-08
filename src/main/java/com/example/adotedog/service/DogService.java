@@ -36,11 +36,10 @@ public class DogService {
         }
     }
 
-    private String gerarCodigo() {
+    private Long gerarCodigo() {
         var codigo = Instant.now().toEpochMilli();
-        var codigoEmString = String.valueOf(codigo);
 
-        return codigoEmString;
+        return codigo;
     }
 
     public List<DogModel> getAllNaoAdotados() {

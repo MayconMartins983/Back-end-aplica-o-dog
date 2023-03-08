@@ -28,7 +28,7 @@ public class DogModel {
     private boolean isAdotado;
     private String telefone;
     private String nomeDono;
-    private String codigo;
+    private Long codigo;
     @Lob
     private byte[] foto;
 }

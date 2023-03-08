@@ -43,23 +43,19 @@ public class AuthService {
         return new JwtDto(jwt);
     }
 
-    public void createUser(Usuario usuario) {
-        if (repository.existsByEmail(usuario.getEmail())) {
-            throw  new RuntimeException(("Já existe um usuario com este email cadastrado."));
+    public void createUser(Usuario user) {
+        if (repository.existsByEmail(user.getEmail())) {
+            throw  new RuntimeException(("Já existe um user com este email cadastrado."));
         }
 
         var roleUser = roleService.findByRoleName(RoleUser.USER);
-        usuario.setRole(roleUser);
-        usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+        user.setRole(roleUser);
+        user.setSenha(passwordEncoder.encode(user.getSenha()));
 
-        repository.save(usuario);
+        repository.save(user);
     }
 
     public boolean validatedJwt(String token) {
         return jwtProvider.validateJwt(token);
-    }
-
-    public List<Usuario> findAllUsuarios() {
-        return repository.findAll();
     }
 }

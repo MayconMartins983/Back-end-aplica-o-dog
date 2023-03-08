@@ -41,8 +41,8 @@ public class JwtFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             logger.error("Não foi possível setar usuario autenticado", e);
         }
-
         filterChain.doFilter(request, response);
+
     }
 
     private String getTokenHeader(HttpServletRequest request) {
